@@ -306,7 +306,7 @@ export default class DayView extends React.PureComponent {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const width = nextProps.width - LEFT_MARGIN;
     this.setState({
       packedEvents: populateEvents(nextProps.events, width, nextProps.start)
@@ -407,6 +407,31 @@ export default class DayView extends React.PureComponent {
     this.props.eventTapped(event);
   }
 
+  getScrollHeight() {
+    const { shouldScrollToCurrTime } = this.props;
+
+    if (shouldScrollToCurrTime !== true) {
+      return false;
+    }
+
+    const offset = 100;
+    const { format24h } = this.props;
+    const { width, styles } = this.props;
+    const timeNowHour = moment().hour();
+    const timeNowMin = moment().minutes();
+    let scrollH =
+      offset * (timeNowHour - this.props.start) +
+      (offset * timeNowMin) / 60 -
+      400;
+
+    if (this._scrollView !== null && scrollH >= 1) {
+      return setTimeout(() => {
+        this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+      }, 1);
+    }
+    return false;
+  }
+
   _renderEvents() {
     const { styles } = this.props;
     const { packedEvents } = this.state;
@@ -472,7 +497,12 @@ export default class DayView extends React.PureComponent {
     return (
       <ScrollView
         {...this._panResponder.panHandlers}
-        ref={ref => (this._scrollView = ref)}
+        ref={ref => {
+          if (ref) {
+            this._scrollView = ref;
+          }
+        }}
+        onContentSizeChange={(width, height) => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
           { width: this.props.width }
