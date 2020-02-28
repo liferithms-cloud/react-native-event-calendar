@@ -302,9 +302,6 @@ export default class DayView extends React.PureComponent {
           calendarHeight: this.calendarHeight,
           props: this.props
         });
-        // console.log('event', evt)
-        // console.log('gestureState', gestureState)
-        // console.log('calandar height', this.calendarHeight)
       }
     });
   }
