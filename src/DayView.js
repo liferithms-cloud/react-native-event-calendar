@@ -496,7 +496,7 @@ export default class DayView extends React.PureComponent {
     const { styles } = this.props;
     return (
       <ScrollView
-        {...this._panResponder.panHandlers}
+        // {...this._panResponder.panHandlers}
         ref={ref => {
           if (ref) {
             this._scrollView = ref;
