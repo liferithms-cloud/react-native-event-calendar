@@ -264,11 +264,22 @@ const allTimes = [
 
 const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
   const durationHeight = calendarHeight / allTimes.length;
-  const minTime = Math.floor(evt.nativeEvent.locationY / 100);
+  const minTime = evt.nativeEvent.locationY / 100;
+  const minTimeSf = Number(minTime).toPrecision(2);
+  var minTimeToString = minTimeSf.toString();
+  var firstel = parseInt(minTimeToString[0]);
+  var lastel = parseInt(minTimeToString[2]);
+  // console.log(lastel)
+  if (lastel >= 5) {
+    // console.log(firstel+0.5)
+    props.onDurationTap(firstel + 0.5);
+  } else {
+    // console.log(firstel)
+    props.onDurationTap(firstel);
+  }
   // if(gestureState)
-  // console.log(evt.nativeEvent.locationY)
-  // console.log(minTime)
-  props.onDurationTap(minTime);
+  // console.log(minTimeToString)
+  // props.onDurationTap(minTime)
 };
 
 function range(from, to) {
@@ -295,13 +306,26 @@ export default class DayView extends React.PureComponent {
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onPanResponderMove: (evt, gestureState) => {
-        getPressedDuration({
-          evt,
-          gestureState,
-          calendarHeight: this.calendarHeight,
-          props: this.props
-        });
+      onPanResponderGrant: (evt, gestureState) => {
+        evt.persist();
+        this.long_press_timeout = setTimeout(() => {
+          // console.log(evt)
+          getPressedDuration({
+            evt,
+            gestureState,
+            calendarHeight: this.calendarHeight,
+            props: this.props
+          });
+          // alert('evt')
+        }, 200);
+        // console.log('gestureState', gestureState)
+        // console.log('calandar height', this.calendarHeight)
+      },
+      onPanResponderRelease: (e, gestureState) => {
+        clearTimeout(this.long_press_timeout);
+      },
+      onPanResponderEnd: (e, gestureState) => {
+        clearTimeout(this.long_press_timeout);
       }
     });
   }
@@ -500,7 +524,7 @@ export default class DayView extends React.PureComponent {
     const { styles } = this.props;
     return (
       <ScrollView
-       
+        {...this._panResponder.panHandlers}
         ref={ref => {
           if (ref) {
             this._scrollView = ref;
