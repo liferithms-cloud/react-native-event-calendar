@@ -237,29 +237,53 @@ const TEXT_LINE_HEIGHT = 17;
 
 const allTimes = [
   { time: 0 },
+  { time: 0.5 },
   { time: 1 },
+  { time: 1.5 },
   { time: 2 },
+  { time: 2.5 },
   { time: 3 },
+  { time: 3.5 },
   { time: 4 },
+  { time: 4.5 },
   { time: 5 },
+  { time: 5.5 },
   { time: 6 },
+  { time: 6.5 },
   { time: 7 },
+  { time: 7.5 },
   { time: 8 },
+  { time: 8.5 },
   { time: 9 },
+  { time: 9.5 },
   { time: 10 },
+  { time: 10.5 },
   { time: 11 },
+  { time: 11.5 },
   { time: 12 },
+  { time: 12.5 },
   { time: 13 },
+  { time: 13.5 },
   { time: 14 },
+  { time: 14.5 },
   { time: 15 },
+  { time: 15.5 },
   { time: 16 },
+  { time: 16.5 },
   { time: 17 },
+  { time: 17.5 },
   { time: 18 },
+  { time: 18.5 },
   { time: 19 },
+  { time: 19.5 },
   { time: 20 },
+  { time: 20.5 },
   { time: 21 },
+  { time: 11.5 },
   { time: 22 },
-  { time: 23 }
+  { time: 22.5 },
+  { time: 23 },
+  { time: 23.5 }
 ];
 
 const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
@@ -269,17 +293,11 @@ const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
   var minTimeToString = minTimeSf.toString();
   var firstel = parseInt(minTimeToString[0]);
   var lastel = parseInt(minTimeToString[2]);
-  // console.log(lastel)
   if (lastel >= 5) {
-    // console.log(firstel+0.5)
-    props.onDurationTap(firstel + 0.5);
+    props.onDurationTap(Math.floor(minTimeSf) + 0.5);
   } else {
-    // console.log(firstel)
-    props.onDurationTap(firstel);
+    props.onDurationTap(Math.floor(minTimeSf));
   }
-  // if(gestureState)
-  // console.log(minTimeToString)
-  // props.onDurationTap(minTime)
 };
 
 function range(from, to) {
@@ -309,13 +327,15 @@ export default class DayView extends React.PureComponent {
       onPanResponderGrant: (evt, gestureState) => {
         evt.persist();
         this.long_press_timeout = setTimeout(() => {
-          // console.log(evt)
-          getPressedDuration({
-            evt,
-            gestureState,
-            calendarHeight: this.calendarHeight,
-            props: this.props
-          });
+          // console.log(gestureState.vy)
+          if (gestureState.vy === 0) {
+            getPressedDuration({
+              evt,
+              gestureState,
+              calendarHeight: this.calendarHeight,
+              props: this.props
+            });
+          }
           // alert('evt')
         }, 200);
         // console.log('gestureState', gestureState)
@@ -327,6 +347,9 @@ export default class DayView extends React.PureComponent {
       onPanResponderEnd: (e, gestureState) => {
         clearTimeout(this.long_press_timeout);
       }
+      // onPanResponderMove: (e, gestureState) => {
+      //   clearTimeout(this.long_press_timeout);
+      // },
     });
   }
 
@@ -524,6 +547,7 @@ export default class DayView extends React.PureComponent {
     const { styles } = this.props;
     return (
       <ScrollView
+        keyboardShouldPersistTaps="always"
         {...this._panResponder.panHandlers}
         ref={ref => {
           if (ref) {
