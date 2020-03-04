@@ -293,17 +293,11 @@ const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
   var minTimeToString = minTimeSf.toString();
   var firstel = parseInt(minTimeToString[0]);
   var lastel = parseInt(minTimeToString[2]);
-  // console.log(lastel)
   if (lastel >= 5) {
-    // console.log(firstel+0.5)
     props.onDurationTap(Math.floor(minTimeSf) + 0.5);
   } else {
-    // console.log(firstel)
     props.onDurationTap(Math.floor(minTimeSf));
   }
-  // if(gestureState)
-  // console.log(minTimeToString)
-  // props.onDurationTap(minTime)
 };
 
 function range(from, to) {
