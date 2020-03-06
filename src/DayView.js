@@ -289,10 +289,11 @@ const allTimes = [
 const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
   const durationHeight = calendarHeight / allTimes.length;
   const minTime = evt.nativeEvent.locationY / 100;
-  const minTimeSf = Number(minTime).toPrecision(2);
+  const minTimeSf = Number(minTime).toPrecision(3);
   var minTimeToString = minTimeSf.toString();
-  var firstel = parseInt(minTimeToString[0]);
-  var lastel = parseInt(minTimeToString[2]);
+  var lastellength = minTimeToString.length;
+  var lastel = Math.floor(minTimeToString[lastellength - 1]);
+  // console.warn(minTimeSf)
   if (lastel >= 5) {
     props.onDurationTap(Math.floor(minTimeSf) + 0.5);
   } else {
