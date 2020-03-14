@@ -248,7 +248,7 @@ export default class EventCalendar extends React.Component {
     };
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillUnmount() {
     if (this.props.onRef) {
       this.props.onRef(this);
     }
@@ -371,6 +371,7 @@ export default class EventCalendar extends React.Component {
           scrollToFirst={scrollToFirst}
           start={start}
           end={end}
+          shouldScrollToCurrTime={shouldScrollToCurrTime}
         />
       </View>
     );
@@ -420,7 +421,13 @@ export default class EventCalendar extends React.Component {
   };
 
   render() {
-    const { width, virtualizedListProps, events, initDate } = this.props;
+    const {
+      width,
+      shouldScrollToCurrTime,
+      virtualizedListProps,
+      events,
+      initDate
+    } = this.props;
 
     return (
       <View style={[this.styles.container, { width }]}>
