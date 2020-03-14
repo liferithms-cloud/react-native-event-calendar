@@ -248,7 +248,7 @@ export default class EventCalendar extends React.Component {
     };
   }
 
-  UNSAFE_componentWillUnmount() {
+  componentDidMount() {
     if (this.props.onRef) {
       this.props.onRef(this);
     }
