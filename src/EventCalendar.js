@@ -221,9 +221,11 @@ import {
   VirtualizedList,
   View,
   TouchableOpacity,
+  StyleSheet,
   Image,
   Text
 } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 import _ from "lodash";
 import moment from "moment";
 import React from "react";
@@ -246,13 +248,13 @@ export default class EventCalendar extends React.Component {
     };
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillUnmount() {
     if (this.props.onRef) {
       this.props.onRef(this);
     }
   }
 
-  UNSAFE_componentWillUnmount() {
+  componentWillUnmount() {
     if (this.props.onRef) {
       this.props.onRef(undefined);
     }
@@ -289,13 +291,17 @@ export default class EventCalendar extends React.Component {
       format24h,
       initDate,
       scrollToFirst = true,
-      shouldScrollToCurrTime = false,
       start = 0,
       end = 24,
       formatHeader,
+      headerButtonPress,
       upperCaseHeader = false
     } = this.props;
     const date = moment(initDate).add(index - this.props.size, "days");
+
+    dateIsToday = date1 => {
+      return moment(date1).format("MMMM, DD") === moment().format("MMMM, DD");
+    };
 
     const leftIcon = this.props.headerIconLeft ? (
       this.props.headerIconLeft
@@ -312,16 +318,12 @@ export default class EventCalendar extends React.Component {
       ? date.format(formatHeader || "DD MMMM YYYY").toUpperCase()
       : date.format(formatHeader || "DD MMMM YYYY");
 
-    const selectedDuration = selectedTime => {
-      this.props.onDurationTap(selectedTime);
-    };
-
     return (
       <View style={[this.styles.container, { width }]}>
-        <View style={this.styles.header}>
+        {/* <View style={this.styles.header}>
           <TouchableOpacity
-            style={this.styles.arrowButton}
-            onPress={this._previous}
+              style={this.styles.arrowButton}
+              onPress={this._previous}
           >
             {leftIcon}
           </TouchableOpacity>
@@ -329,11 +331,31 @@ export default class EventCalendar extends React.Component {
             <Text style={this.styles.headerText}>{headerText}</Text>
           </View>
           <TouchableOpacity
-            style={this.styles.arrowButton}
-            onPress={this._next}
+              style={this.styles.arrowButton}
+              onPress={this._next}
           >
             {rightIcon}
           </TouchableOpacity>
+        </View> */}
+        <View style={styles.titleContainer}>
+          <View>
+            {/* <Text style={styles.titleText}>{selectedDate.toString()}</Text> */}
+            <Text style={[styles.titleText, { paddingTop: 7 }]}>
+              {dateIsToday(date) ? <Text> Today</Text> : ""}
+            </Text>
+            <Text style={styles.dateText}>
+              <Text> {moment(date).format("MMMM D")} </Text>
+            </Text>
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.seemoreButton}
+              onPress={headerButtonPress}
+            >
+              <FontAwesome5 name="ellipsis-h" />
+            </TouchableOpacity>
+          </View>
         </View>
         <DayView
           date={date}
@@ -343,7 +365,6 @@ export default class EventCalendar extends React.Component {
           headerStyle={this.props.headerStyle}
           renderEvent={this.props.renderEvent}
           eventTapped={this.props.eventTapped}
-          onDurationTap={selectedDuration}
           events={item}
           width={width}
           styles={this.styles}
@@ -422,6 +443,7 @@ export default class EventCalendar extends React.Component {
           getItemLayout={this._getItemLayout.bind(this)}
           horizontal
           pagingEnabled
+          headerButtonPress={this.props.headerButtonPress}
           renderItem={this._renderItem.bind(this)}
           style={{ width: width }}
           onMomentumScrollEnd={event => {
@@ -441,3 +463,41 @@ export default class EventCalendar extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    paddingHorizontal: 15,
+    backgroundColor: "#f7f7f7"
+  },
+  titleContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    // paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  titleText: {
+    fontFamily: "SFProDisplay-Heavy",
+    fontSize: 24,
+    color: "#222222",
+    paddingBottom: 10
+  },
+  dateText: {
+    // marginTop: 31,
+    // marginBottom: 11,
+    fontFamily: "SFProDisplay-Regular",
+    fontSize: 18,
+    color: "#222222"
+  },
+  seemoreButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    backgroundColor: "#fff"
+  }
+});
