@@ -291,6 +291,7 @@ export default class EventCalendar extends React.Component {
       format24h,
       initDate,
       scrollToFirst = true,
+      shouldScrollToCurrTime,
       start = 0,
       end = 24,
       formatHeader,
@@ -421,13 +422,7 @@ export default class EventCalendar extends React.Component {
   };
 
   render() {
-    const {
-      width,
-      shouldScrollToCurrTime,
-      virtualizedListProps,
-      events,
-      initDate
-    } = this.props;
+    const { width, virtualizedListProps, events, initDate } = this.props;
 
     return (
       <View style={[this.styles.container, { width }]}>

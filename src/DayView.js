@@ -235,71 +235,71 @@ const TEXT_LINE_HEIGHT = 17;
 // const MIN_EVENT_TITLE_WIDTH = 20
 // const EVENT_PADDING_LEFT = 4
 
-const allTimes = [
-  { time: 0 },
-  { time: 0.5 },
-  { time: 1 },
-  { time: 1.5 },
-  { time: 2 },
-  { time: 2.5 },
-  { time: 3 },
-  { time: 3.5 },
-  { time: 4 },
-  { time: 4.5 },
-  { time: 5 },
-  { time: 5.5 },
-  { time: 6 },
-  { time: 6.5 },
-  { time: 7 },
-  { time: 7.5 },
-  { time: 8 },
-  { time: 8.5 },
-  { time: 9 },
-  { time: 9.5 },
-  { time: 10 },
-  { time: 10.5 },
-  { time: 11 },
-  { time: 11.5 },
-  { time: 12 },
-  { time: 12.5 },
-  { time: 13 },
-  { time: 13.5 },
-  { time: 14 },
-  { time: 14.5 },
-  { time: 15 },
-  { time: 15.5 },
-  { time: 16 },
-  { time: 16.5 },
-  { time: 17 },
-  { time: 17.5 },
-  { time: 18 },
-  { time: 18.5 },
-  { time: 19 },
-  { time: 19.5 },
-  { time: 20 },
-  { time: 20.5 },
-  { time: 21 },
-  { time: 11.5 },
-  { time: 22 },
-  { time: 22.5 },
-  { time: 23 },
-  { time: 23.5 }
-];
+// const allTimes = [
+//   { time: 0 },
+//   { time: 0.5 },
+//   { time: 1 },
+//   { time: 1.5 },
+//   { time: 2 },
+//   { time: 2.5 },
+//   { time: 3 },
+//   { time: 3.5 },
+//   { time: 4 },
+//   { time: 4.5 },
+//   { time: 5 },
+//   { time: 5.5 },
+//   { time: 6 },
+//   { time: 6.5 },
+//   { time: 7 },
+//   { time: 7.5 },
+//   { time: 8 },
+//   { time: 8.5 },
+//   { time: 9 },
+//   { time: 9.5 },
+//   { time: 10 },
+//   { time: 10.5 },
+//   { time: 11 },
+//   { time: 11.5 },
+//   { time: 12 },
+//   { time: 12.5 },
+//   { time: 13 },
+//   { time: 13.5 },
+//   { time: 14 },
+//   { time: 14.5 },
+//   { time: 15 },
+//   { time: 15.5 },
+//   { time: 16 },
+//   { time: 16.5 },
+//   { time: 17 },
+//   { time: 17.5 },
+//   { time: 18 },
+//   { time: 18.5 },
+//   { time: 19 },
+//   { time: 19.5 },
+//   { time: 20 },
+//   { time: 20.5 },
+//   { time: 21 },
+//   { time: 11.5 },
+//   { time: 22 },
+//   { time: 22.5 },
+//   { time: 23 },
+//   { time: 23.5 }
+// ];
 
-const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
-  const durationHeight = calendarHeight / allTimes.length;
-  const minTime = evt.nativeEvent.locationY / 100;
-  const minTimeSf = Number(minTime).toPrecision(3);
-  var minTimeToString = minTimeSf.toString();
-  var lastellength = minTimeToString.length;
-  var lastel = Math.floor(minTimeToString[lastellength - 1]);
-  // console.warn(minTimeSf)
-  if (lastel >= 5) {
-    props.onDurationTap(Math.floor(minTimeSf) + 0.5);
-  } else {
-    props.onDurationTap(Math.floor(minTimeSf));
-  }
-};
+// const getPressedDuration = ({ evt, gestureState, calendarHeight, props }) => {
+//   const durationHeight = calendarHeight / allTimes.length;
+//   const minTime = evt.nativeEvent.locationY / 100;
+//   const minTimeSf = Number(minTime).toPrecision(3);
+//   var minTimeToString = minTimeSf.toString();
+//   var lastellength = minTimeToString.length;
+//   var lastel = Math.floor(minTimeToString[lastellength - 1]);
+//   // console.warn(minTimeSf)
+//   if (lastel >= 5) {
+//     props.onDurationTap(Math.floor(minTimeSf) + 0.5);
+//   } else {
+//     props.onDurationTap(Math.floor(minTimeSf));
+//   }
+// };
 
 function range(from, to) {
   return Array.from(Array(to), (_, i) => from + i);
@@ -319,42 +319,42 @@ export default class DayView extends React.PureComponent {
       _scrollY: initPosition,
       packedEvents
     };
-    this._panResponder = PanResponder.create({
-      // Ask to be the responder:
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onPanResponderGrant: (evt, gestureState) => {
-        evt.persist();
-        this.long_press_timeout = setTimeout(() => {
-          // console.log(gestureState.vy)
-          if (gestureState.vy === 0) {
-            getPressedDuration({
-              evt,
-              gestureState,
-              calendarHeight: this.calendarHeight,
-              props: this.props
-            });
-          }
-          // alert('evt')
-        }, 200);
-        // console.log('gestureState', gestureState)
-        // console.log('calandar height', this.calendarHeight)
-      },
-      onPanResponderRelease: (e, gestureState) => {
-        clearTimeout(this.long_press_timeout);
-      },
-      onPanResponderEnd: (e, gestureState) => {
-        clearTimeout(this.long_press_timeout);
-      }
-      // onPanResponderMove: (e, gestureState) => {
-      //   clearTimeout(this.long_press_timeout);
-      // },
-    });
+    // this._panResponder = PanResponder.create({
+    //   // Ask to be the responder:
+    //   onStartShouldSetPanResponder: (evt, gestureState) => true,
+    //   onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+    //   onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    //   onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+    //   onPanResponderGrant: (evt, gestureState) => {
+    //     evt.persist();
+    //     this.long_press_timeout = setTimeout(() => {
+    //       // console.log(gestureState.vy)
+    //       if (gestureState.vy === 0) {
+    //         getPressedDuration({
+    //           evt,
+    //           gestureState,
+    //           calendarHeight: this.calendarHeight,
+    //           props: this.props
+    //         });
+    //       }
+    //       // alert('evt')
+    //     }, 200);
+    //     // console.log('gestureState', gestureState)
+    //     // console.log('calandar height', this.calendarHeight)
+    //   },
+    //   onPanResponderRelease: (e, gestureState) => {
+    //     clearTimeout(this.long_press_timeout);
+    //   },
+    //   onPanResponderEnd: (e, gestureState) => {
+    //     clearTimeout(this.long_press_timeout);
+    //   }
+    //   // onPanResponderMove: (e, gestureState) => {
+    //   //   clearTimeout(this.long_press_timeout);
+    //   // },
+    // });
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const width = nextProps.width - LEFT_MARGIN;
     this.setState({
       packedEvents: populateEvents(nextProps.events, width, nextProps.start)
@@ -549,12 +549,7 @@ export default class DayView extends React.PureComponent {
     return (
       <ScrollView
         keyboardShouldPersistTaps="always"
-        {...this._panResponder.panHandlers}
-        ref={ref => {
-          if (ref) {
-            this._scrollView = ref;
-          }
-        }}
+        ref={ref => (this._scrollView = ref)}
         onContentSizeChange={(width, height) => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
