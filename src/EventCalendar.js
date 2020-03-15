@@ -372,7 +372,7 @@ export default class EventCalendar extends React.Component {
           scrollToFirst={scrollToFirst}
           start={start}
           end={end}
-          shouldScrollToCurrTime={shouldScrollToCurrTime}
+          shouldScrollToCurrTime={true}
         />
       </View>
     );
