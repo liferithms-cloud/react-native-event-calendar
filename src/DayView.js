@@ -476,7 +476,7 @@ export default class DayView extends React.PureComponent {
 
       if (!this._scrollView !== null && scrollH >= 1) {
         return setTimeout(() => {
-          if (this !== null) {
+          if(this._scrollView !== null) {
             this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
           }
         }, 1);
