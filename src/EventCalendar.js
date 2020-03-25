@@ -234,7 +234,7 @@ import styleConstructor from "./style";
 
 import DayView from "./DayView";
 
-export class SingleDay extends PureComponent {
+export class SingleDay extends React.PureComponent {
   constructor(props) {
     super(props);
 
