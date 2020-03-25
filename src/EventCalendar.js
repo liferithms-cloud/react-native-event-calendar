@@ -234,6 +234,83 @@ import styleConstructor from "./style";
 
 import DayView from "./DayView";
 
+export class SingleDay extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    const start = props.start ? props.start : 0;
+    const end = props.end ? props.end : 24;
+
+    this.styles = styleConstructor(props.styles, (end - start) * 100);
+    this.state = {
+      date: moment(this.props.initDate),
+      index: this.props.size
+    };
+  }
+  render() {
+    // const {height, width} = Dimensions.get('window')
+    const {
+      index,
+      item,
+      width,
+      format24h,
+      initDate,
+      scrollToFirst = true,
+      shouldScrollToCurrTime,
+      start = 0,
+      end = 24,
+      formatHeader,
+      headerButtonPress,
+      upperCaseHeader = false
+    } = this.props;
+    const date = moment(initDate).add(index - this.props.size, "days");
+
+    dateIsToday = date1 => {
+      return moment(date1).format("MMMM, DD") === moment().format("MMMM, DD");
+    };
+    return (
+      <View style={[this.styles.container, { width }]}>
+        <View style={styles.titleContainer}>
+          <View>
+            {/* <Text style={styles.titleText}>{selectedDate.toString()}</Text> */}
+            <Text style={[styles.titleText, { paddingTop: 7 }]}>
+              {dateIsToday(date) ? <Text> Today</Text> : ""}
+            </Text>
+            <Text style={styles.dateText}>
+              <Text> {moment(date).format("MMMM D")} </Text>
+            </Text>
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.seemoreButton}
+              onPress={headerButtonPress}
+            >
+              <FontAwesome5 name="ellipsis-h" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <DayView
+          date={date}
+          index={index}
+          format24h={format24h}
+          formatHeader={this.props.formatHeader}
+          headerStyle={this.props.headerStyle}
+          renderEvent={this.props.renderEvent}
+          eventTapped={this.props.eventTapped}
+          events={item}
+          width={width}
+          styles={this.styles}
+          scrollToFirst={scrollToFirst}
+          start={start}
+          end={end}
+          shouldScrollToCurrTime={true}
+        />
+      </View>
+    );
+  }
+}
+
 export default class EventCalendar extends React.Component {
   constructor(props) {
     super(props);
@@ -439,7 +516,9 @@ export default class EventCalendar extends React.Component {
           horizontal
           pagingEnabled
           headerButtonPress={this.props.headerButtonPress}
-          renderItem={this._renderItem.bind(this)}
+          renderItem={({ index, item }) => (
+            <SingleDay {...this.props} index={index} item={item} />
+          )}
           style={{ width: width }}
           onMomentumScrollEnd={event => {
             const index = parseInt(event.nativeEvent.contentOffset.x / width);
