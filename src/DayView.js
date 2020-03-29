@@ -463,8 +463,8 @@ export default class DayView extends React.PureComponent {
     }
 
     const offset = 100;
-    const { format24h } = this.props;
-    const { width, styles } = this.props;
+    // const { format24h } = this.props;
+    // const { width, styles } = this.props;
     const timeNowHour = moment().hour();
     const timeNowMin = moment().minutes();
 
@@ -550,9 +550,9 @@ export default class DayView extends React.PureComponent {
     const { styles } = this.props;
     return (
       <ScrollView
-        keyboardShouldPersistTaps="always"
+        // keyboardShouldPersistTaps="always"
         ref={ref => (this._scrollView = ref)}
-        onContentSizeChange={(width, height) => this.getScrollHeight()}
+        onContentSizeChange={() => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
           { width: this.props.width }
