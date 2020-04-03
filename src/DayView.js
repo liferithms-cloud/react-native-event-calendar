@@ -494,7 +494,8 @@ export default class DayView extends React.PureComponent {
         left: event.left,
         height: event.height,
         width: event.width + 10,
-        top: event.top
+        top: event.top,
+        opacity: event.opacity
       };
 
       const eventColor = {

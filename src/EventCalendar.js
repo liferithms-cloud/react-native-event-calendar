@@ -228,7 +228,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import _ from "lodash";
 import moment from "moment";
-import React from "react";
+import React, { PureComponent } from "react";
 
 import styleConstructor from "./style";
 
