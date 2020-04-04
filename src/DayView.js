@@ -220,7 +220,7 @@ import {
   Text,
   ScrollView,
   PanResponder,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import populateEvents from "./Packer";
 import React from "react";
@@ -317,7 +317,7 @@ export default class DayView extends React.PureComponent {
     initPosition = initPosition < 0 ? 0 : initPosition;
     this.state = {
       _scrollY: initPosition,
-      packedEvents
+      packedEvents,
     };
     // this._panResponder = PanResponder.create({
     //   // Ask to be the responder:
@@ -357,7 +357,7 @@ export default class DayView extends React.PureComponent {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const width = nextProps.width - LEFT_MARGIN;
     this.setState({
-      packedEvents: populateEvents(nextProps.events, width, nextProps.start)
+      packedEvents: populateEvents(nextProps.events, width, nextProps.start),
     });
   }
 
@@ -371,7 +371,7 @@ export default class DayView extends React.PureComponent {
         this._scrollView.scrollTo({
           x: 0,
           y: this.state._scrollY,
-          animated: true
+          animated: true,
         });
       }
     }, 1);
@@ -392,8 +392,8 @@ export default class DayView extends React.PureComponent {
             top:
               offset * (timeNowHour - this.props.start) +
               (offset * timeNowMin) / 60,
-            width: width - 20
-          }
+            width: width - 20,
+          },
         ]}
       />
     );
@@ -434,9 +434,9 @@ export default class DayView extends React.PureComponent {
           key={`lineHalf${i}`}
           style={[
             styles.line,
-            { top: offset * (index + 0.5), width: width - 20 }
+            { top: offset * (index + 0.5), width: width - 20 },
           ]}
-        />
+        />,
       ];
     });
   }
@@ -495,11 +495,13 @@ export default class DayView extends React.PureComponent {
         height: event.height,
         width: event.width + 10,
         top: event.top,
-        opacity: event.opacity
+        opacity: event.opacity,
       };
 
       const eventColor = {
-        backgroundColor: event.color
+        backgroundColor: event.color,
+        borderWidth: 0.5,
+        borderColor: event.borderColor,
       };
 
       // Fixing the number of lines for the event title makes this calculation easier.
@@ -517,13 +519,16 @@ export default class DayView extends React.PureComponent {
             this.props.renderEvent(event)
           ) : (
             <View>
-              <Text numberOfLines={1} style={styles.eventTitle}>
+              <Text
+                numberOfLines={1}
+                style={[styles.eventTitle, { color: event.textColor }]}
+              >
                 {event.title || "Event"}
               </Text>
               {numberOfLines > 1 ? (
                 <Text
                   numberOfLines={numberOfLines - 1}
-                  style={[styles.eventSummary]}
+                  style={[styles.eventSummary, { color: event.textColor }]}
                 >
                   {event.summary || " "}
                 </Text>
@@ -552,11 +557,11 @@ export default class DayView extends React.PureComponent {
     return (
       <ScrollView
         keyboardShouldPersistTaps="always"
-        ref={ref => (this._scrollView = ref)}
+        ref={(ref) => (this._scrollView = ref)}
         onContentSizeChange={(width, height) => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
-          { width: this.props.width }
+          { width: this.props.width },
         ]}
       >
         {this._renderLines()}
