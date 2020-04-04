@@ -219,7 +219,7 @@ import {
   View,
   Text,
   ScrollView,
-  PanResponder,
+  // PanResponder,
   TouchableOpacity
 } from "react-native";
 import populateEvents from "./Packer";
@@ -494,11 +494,14 @@ export default class DayView extends React.PureComponent {
         left: event.left,
         height: event.height,
         width: event.width + 10,
-        top: event.top
+        top: event.top,
+        opacity: event.opacity
       };
 
       const eventColor = {
-        backgroundColor: event.color
+        backgroundColor: event.color,
+        borderWidth: 0.8,
+        borderColor: event.borderColor
       };
 
       // Fixing the number of lines for the event title makes this calculation easier.
@@ -516,13 +519,16 @@ export default class DayView extends React.PureComponent {
             this.props.renderEvent(event)
           ) : (
             <View>
-              <Text numberOfLines={1} style={styles.eventTitle}>
+             <Text
+                numberOfLines={1}
+                style={[styles.eventTitle, { color: event.textColor }]}
+              >
                 {event.title || "Event"}
               </Text>
               {numberOfLines > 1 ? (
                 <Text
                   numberOfLines={numberOfLines - 1}
-                  style={[styles.eventSummary]}
+                  style={[styles.eventSummary, { color: event.textColor }]}
                 >
                   {event.summary || " "}
                 </Text>
@@ -552,7 +558,7 @@ export default class DayView extends React.PureComponent {
       <ScrollView
         // keyboardShouldPersistTaps="always"
         ref={ref => (this._scrollView = ref)}
-        onContentSizeChange={() => this.getScrollHeight()}
+        // onContentSizeChange={() => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
           { width: this.props.width }
