@@ -475,24 +475,23 @@ export default class DayView extends React.PureComponent {
         (offset * timeNowMin) / 60 -
         400;
 
-        // if(!this._scrollView !== null && scrollH >= 1) {
-        //   return this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-        // }
-        if (!this._scrollView !== null && scrollH >= 1) {
+      // if(!this._scrollView !== null && scrollH >= 1) {
+      //   return this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+      // }
+      if (!this._scrollView !== null && scrollH >= 1) {
         // return setTimeout(() => {
-          if(this._scrollView !== null) {
-            this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-          }
+        if (this._scrollView !== null) {
+          this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+        }
         // }, 0.2);
       }
 
-
       // if (!this._scrollView !== null && scrollH >= 1) {
-        // return setTimeout(() => {
-        //   if(this._scrollView !== null) {
-        //     this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-        //   }
-        // }, 1);
+      // return setTimeout(() => {
+      //   if(this._scrollView !== null) {
+      //     this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+      //   }
+      // }, 1);
       // }
     }
 
@@ -532,7 +531,7 @@ export default class DayView extends React.PureComponent {
             this.props.renderEvent(event)
           ) : (
             <View>
-             <Text
+              <Text
                 numberOfLines={3}
                 style={[styles.eventTitle, { color: event.textColor }]}
               >
@@ -570,7 +569,7 @@ export default class DayView extends React.PureComponent {
     return (
       <ScrollView
         // keyboardShouldPersistTaps="always"
-        ref={ref => (this._scrollView = ref)}
+        ref={(ref) => (this._scrollView = ref)}
         onContentSizeChange={() => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
