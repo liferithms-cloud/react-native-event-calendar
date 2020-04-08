@@ -520,7 +520,7 @@ export default class DayView extends React.PureComponent {
           ) : (
             <View>
              <Text
-                numberOfLines={1}
+                numberOfLines={2}
                 style={[styles.eventTitle, { color: event.textColor }]}
               >
                 {event.title || "Event"}
