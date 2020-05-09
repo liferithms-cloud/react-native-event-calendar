@@ -422,7 +422,7 @@ export default class EventCalendar extends React.Component {
               {dateIsToday(date) ? <Text> Today</Text> : ""}
             </Text>
             <Text style={styles.dateText}>
-              <Text> {moment(date).format("MMMM D")} </Text>
+              <Text> {moment(date).format("dddd, MMMM D")} </Text>
             </Text>
           </View>
 
