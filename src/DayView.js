@@ -456,11 +456,12 @@ export default class DayView extends React.PureComponent {
   }
 
   getScrollHeight() {
-    const { shouldScrollToCurrTime } = this.props;
+    // const { shouldScrollToCurrTime } = this.props;
+    // const { shouldScrollToCurrTime } = true;
 
-    if (shouldScrollToCurrTime !== true) {
-      return false;
-    }
+    // if (shouldScrollToCurrTime !== true) {
+    //   return false;
+    // }
 
     const offset = 100;
     // const { format24h } = this.props;
@@ -474,13 +475,17 @@ export default class DayView extends React.PureComponent {
         (offset * timeNowMin) / 60 -
         400;
 
-      if (!this._scrollView !== null && scrollH >= 1) {
-        return setTimeout(() => {
-          if(this._scrollView !== null) {
-            this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-          }
-        }, 1);
-      }
+        if(!this._scrollView !== null && scrollH >= 1) {
+          return this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+        }
+
+      // if (!this._scrollView !== null && scrollH >= 1) {
+      //   return setTimeout(() => {
+      //     if(this._scrollView !== null) {
+      //       this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+      //     }
+      //   }, 1);
+      // }
     }
 
     return false;
@@ -558,7 +563,7 @@ export default class DayView extends React.PureComponent {
       <ScrollView
         // keyboardShouldPersistTaps="always"
         ref={ref => (this._scrollView = ref)}
-        // onContentSizeChange={() => this.getScrollHeight()}
+        onContentSizeChange={() => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
           { width: this.props.width }
