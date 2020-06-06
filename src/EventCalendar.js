@@ -353,7 +353,7 @@ export default class EventCalendar extends React.Component {
       index - this.props.size,
       "days"
     );
-    return _.filter(events, event => {
+    return _.filter(events, (event) => {
       const eventStartTime = moment(event.start);
       return (
         eventStartTime >= date.clone().startOf("day") &&
@@ -367,6 +367,7 @@ export default class EventCalendar extends React.Component {
       width,
       format24h,
       initDate,
+      showBadge,
       scrollToFirst = true,
       shouldScrollToCurrTime,
       start = 0,
@@ -377,7 +378,7 @@ export default class EventCalendar extends React.Component {
     } = this.props;
     const date = moment(initDate).add(index - this.props.size, "days");
 
-    dateIsToday = date1 => {
+    dateIsToday = (date1) => {
       return moment(date1).format("MMMM, DD") === moment().format("MMMM, DD");
     };
 
@@ -431,6 +432,7 @@ export default class EventCalendar extends React.Component {
               style={styles.seemoreButton}
               onPress={headerButtonPress}
             >
+              {showBadge && <View style={styles.badge} />}
               <FontAwesome5 name="ellipsis-h" />
             </TouchableOpacity>
           </View>
@@ -499,7 +501,13 @@ export default class EventCalendar extends React.Component {
   };
 
   render() {
-    const { width, virtualizedListProps, events, initDate } = this.props;
+    const {
+      width,
+      virtualizedListProps,
+      events,
+      initDate,
+      showBadge
+    } = this.props;
 
     return (
       <View style={[this.styles.container, { width }]}>
@@ -521,7 +529,7 @@ export default class EventCalendar extends React.Component {
           //   <SingleDay {...this.props} index={index} item={item} />
           // )}
           style={{ width: width }}
-          onMomentumScrollEnd={event => {
+          onMomentumScrollEnd={(event) => {
             const index = parseInt(event.nativeEvent.contentOffset.x / width);
             const date = moment(this.props.initDate).add(
               index - this.props.size,
@@ -534,7 +542,6 @@ export default class EventCalendar extends React.Component {
           }}
           {...virtualizedListProps}
         />
-
       </View>
     );
   }
@@ -575,5 +582,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 8,
     backgroundColor: "#fff"
+  },
+  badge: {
+    // width: 3,
+    height: 14,
+    width: 14,
+    backgroundColor: "#F74F5A",
+    borderRadius: 50,
+    padding: 0,
+    position: "absolute",
+    top: -5,
+    right: -5,
+    zIndex: 10
   }
 });
