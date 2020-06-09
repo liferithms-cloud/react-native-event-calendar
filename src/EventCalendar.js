@@ -223,16 +223,17 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Text
-} from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import _ from "lodash";
-import moment from "moment";
-import React, { PureComponent } from "react";
+  Text,
+} from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import _ from 'lodash';
+import moment from 'moment';
+import React, { PureComponent } from 'react';
 
-import styleConstructor from "./style";
+import styleConstructor from './style';
 
-import DayView from "./DayView";
+import DayView from './DayView';
+import { Badge } from 'react-native-paper';
 
 // export class SingleDay extends React.PureComponent {
 //   constructor(props) {
@@ -317,11 +318,12 @@ export default class EventCalendar extends React.Component {
 
     const start = props.start ? props.start : 0;
     const end = props.end ? props.end : 24;
+    // const showBadge = props.showBadge;
 
     this.styles = styleConstructor(props.styles, (end - start) * 100);
     this.state = {
       date: moment(this.props.initDate),
-      index: this.props.size
+      index: this.props.size,
     };
   }
 
@@ -340,7 +342,7 @@ export default class EventCalendar extends React.Component {
   static defaultProps = {
     size: 30,
     initDate: new Date(),
-    formatHeader: "DD MMMM YYYY"
+    formatHeader: 'DD MMMM YYYY',
   };
 
   _getItemLayout(data, index) {
@@ -351,13 +353,13 @@ export default class EventCalendar extends React.Component {
   _getItem(events, index) {
     const date = moment(this.props.initDate).add(
       index - this.props.size,
-      "days"
+      'days'
     );
     return _.filter(events, event => {
       const eventStartTime = moment(event.start);
       return (
-        eventStartTime >= date.clone().startOf("day") &&
-        eventStartTime <= date.clone().endOf("day")
+        eventStartTime >= date.clone().startOf('day') &&
+        eventStartTime <= date.clone().endOf('day')
       );
     });
   }
@@ -369,32 +371,33 @@ export default class EventCalendar extends React.Component {
       initDate,
       scrollToFirst = true,
       shouldScrollToCurrTime,
+      showBadge,
       start = 0,
       end = 24,
       formatHeader,
       headerButtonPress,
-      upperCaseHeader = false
+      upperCaseHeader = false,
     } = this.props;
-    const date = moment(initDate).add(index - this.props.size, "days");
+    const date = moment(initDate).add(index - this.props.size, 'days');
 
     dateIsToday = date1 => {
-      return moment(date1).format("MMMM, DD") === moment().format("MMMM, DD");
+      return moment(date1).format('MMMM, DD') === moment().format('MMMM, DD');
     };
 
     const leftIcon = this.props.headerIconLeft ? (
       this.props.headerIconLeft
     ) : (
-      <Image source={require("./back.png")} style={this.styles.arrow} />
+      <Image source={require('./back.png')} style={this.styles.arrow} />
     );
     const rightIcon = this.props.headerIconRight ? (
       this.props.headerIconRight
     ) : (
-      <Image source={require("./forward.png")} style={this.styles.arrow} />
+      <Image source={require('./forward.png')} style={this.styles.arrow} />
     );
 
     let headerText = upperCaseHeader
-      ? date.format(formatHeader || "DD MMMM YYYY").toUpperCase()
-      : date.format(formatHeader || "DD MMMM YYYY");
+      ? date.format(formatHeader || 'DD MMMM YYYY').toUpperCase()
+      : date.format(formatHeader || 'DD MMMM YYYY');
 
     return (
       <View style={[this.styles.container, { width }]}>
@@ -419,10 +422,10 @@ export default class EventCalendar extends React.Component {
           <View>
             {/* <Text style={styles.titleText}>{selectedDate.toString()}</Text> */}
             <Text style={[styles.titleText, { paddingTop: 7 }]}>
-              {dateIsToday(date) ? <Text> Today</Text> : ""}
+              {dateIsToday(date) ? <Text> Today</Text> : ''}
             </Text>
             <Text style={styles.dateText}>
-              <Text> {moment(date).format("dddd, MMMM D")} </Text>
+              <Text> {moment(date).format('dddd, MMMM D')} </Text>
             </Text>
           </View>
 
@@ -431,6 +434,7 @@ export default class EventCalendar extends React.Component {
               style={styles.seemoreButton}
               onPress={headerButtonPress}
             >
+              {showBadge && <Badge size={12} style={styles.badgeStyle} />}
               <FontAwesome5 name="ellipsis-h" />
             </TouchableOpacity>
           </View>
@@ -447,6 +451,7 @@ export default class EventCalendar extends React.Component {
           width={width}
           styles={this.styles}
           scrollToFirst={false}
+          showBadge={showBadge}
           start={start}
           end={end}
           shouldScrollToCurrTime={shouldScrollToCurrTime}
@@ -461,7 +466,7 @@ export default class EventCalendar extends React.Component {
     }
     const date = moment(this.props.initDate).add(
       index - this.props.size,
-      "days"
+      'days'
     );
     this.refs.calendar.scrollToIndex({ index, animated: false });
     this.setState({ index, date });
@@ -470,9 +475,9 @@ export default class EventCalendar extends React.Component {
   _goToDate(date) {
     const earliestDate = moment(this.props.initDate).subtract(
       this.props.size,
-      "days"
+      'days'
     );
-    const index = moment(date).diff(earliestDate, "days");
+    const index = moment(date).diff(earliestDate, 'days');
     this._goToPage(index);
   }
 
@@ -481,8 +486,8 @@ export default class EventCalendar extends React.Component {
     if (this.props.dateChanged) {
       this.props.dateChanged(
         moment(this.props.initDate)
-          .add(this.state.index - 1 - this.props.size, "days")
-          .format("YYYY-MM-DD")
+          .add(this.state.index - 1 - this.props.size, 'days')
+          .format('YYYY-MM-DD')
       );
     }
   };
@@ -492,8 +497,8 @@ export default class EventCalendar extends React.Component {
     if (this.props.dateChanged) {
       this.props.dateChanged(
         moment(this.props.initDate)
-          .add(this.state.index + 1 - this.props.size, "days")
-          .format("YYYY-MM-DD")
+          .add(this.state.index + 1 - this.props.size, 'days')
+          .format('YYYY-MM-DD')
       );
     }
   };
@@ -525,16 +530,15 @@ export default class EventCalendar extends React.Component {
             const index = parseInt(event.nativeEvent.contentOffset.x / width);
             const date = moment(this.props.initDate).add(
               index - this.props.size,
-              "days"
+              'days'
             );
             if (this.props.dateChanged) {
-              this.props.dateChanged(date.format("YYYY-MM-DD"));
+              this.props.dateChanged(date.format('YYYY-MM-DD'));
             }
             this.setState({ index, date });
           }}
           {...virtualizedListProps}
         />
-
       </View>
     );
   }
@@ -544,36 +548,42 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     paddingHorizontal: 15,
-    backgroundColor: "#f7f7f7"
+    backgroundColor: '#f7f7f7',
   },
   titleContainer: {
     marginTop: 20,
     marginBottom: 20,
     // paddingLeft: 10,
     paddingRight: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between"
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  badgeStyle: {
+    position: 'absolute',
+    top: -3,
+    left: 30,
+    zIndex: 10,
   },
   titleText: {
-    fontFamily: "SFProDisplay-Heavy",
+    fontFamily: 'SFProDisplay-Heavy',
     fontSize: 24,
-    color: "#222222",
-    paddingBottom: 10
+    color: '#222222',
+    paddingBottom: 10,
   },
   dateText: {
     // marginTop: 31,
     // marginBottom: 11,
-    fontFamily: "SFProDisplay-Regular",
+    fontFamily: 'SFProDisplay-Regular',
     fontSize: 18,
-    color: "#222222"
+    color: '#222222',
   },
   seemoreButton: {
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 8,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: '#fff',
+  },
 });
