@@ -220,12 +220,12 @@ import {
   Text,
   ScrollView,
   // PanResponder,
-  TouchableOpacity
-} from "react-native";
-import populateEvents from "./Packer";
-import React from "react";
-import moment from "moment";
-import _ from "lodash";
+  TouchableOpacity,
+} from 'react-native';
+import populateEvents from './Packer';
+import React from 'react';
+import moment from 'moment';
+import _ from 'lodash';
 
 const LEFT_MARGIN = 40 - 1;
 // const RIGHT_MARGIN = 10
@@ -312,12 +312,12 @@ export default class DayView extends React.PureComponent {
     const width = props.width - LEFT_MARGIN;
     const packedEvents = populateEvents(props.events, width, props.start);
     let initPosition =
-      _.min(_.map(packedEvents, "top")) -
+      _.min(_.map(packedEvents, 'top')) -
       this.calendarHeight / (props.end - props.start);
     initPosition = initPosition < 0 ? 0 : initPosition;
     this.state = {
       _scrollY: initPosition,
-      packedEvents
+      packedEvents,
     };
     // this._panResponder = PanResponder.create({
     //   // Ask to be the responder:
@@ -357,7 +357,7 @@ export default class DayView extends React.PureComponent {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const width = nextProps.width - LEFT_MARGIN;
     this.setState({
-      packedEvents: populateEvents(nextProps.events, width, nextProps.start)
+      packedEvents: populateEvents(nextProps.events, width, nextProps.start),
     });
   }
 
@@ -371,7 +371,7 @@ export default class DayView extends React.PureComponent {
         this._scrollView.scrollTo({
           x: 0,
           y: this.state._scrollY,
-          animated: true
+          animated: true,
         });
       }
     }, 1);
@@ -392,8 +392,8 @@ export default class DayView extends React.PureComponent {
             top:
               offset * (timeNowHour - this.props.start) +
               (offset * timeNowMin) / 60,
-            width: width - 20
-          }
+            width: width - 20,
+          },
         ]}
       />
     );
@@ -434,9 +434,9 @@ export default class DayView extends React.PureComponent {
           key={`lineHalf${i}`}
           style={[
             styles.line,
-            { top: offset * (index + 0.5), width: width - 20 }
+            { top: offset * (index + 0.5), width: width - 20 },
           ]}
-        />
+        />,
       ];
     });
   }
@@ -475,28 +475,27 @@ export default class DayView extends React.PureComponent {
         (offset * timeNowMin) / 60 -
         400;
 
-        // if(!this._scrollView !== null && scrollH >= 1) {
-        //   return this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-        // }
-        if (!this._scrollView !== null && scrollH >= 1) {
-        // return setTimeout(() => {
-          if(this._scrollView !== null) {
-            this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-          }
-        // }, 0.2);
-      }
-
+      // if(!this._scrollView !== null && scrollH >= 1) {
+      //   return this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+      // }
+      // if (!this._scrollView !== null && scrollH >= 1) {
+      return setTimeout(() => {
+        if (this._scrollView !== null && scrollH) {
+          this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+        }
+      }, 0.2);
+      // }
 
       // if (!this._scrollView !== null && scrollH >= 1) {
-        // return setTimeout(() => {
-        //   if(this._scrollView !== null) {
-        //     this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
-        //   }
-        // }, 1);
+      // return setTimeout(() => {
+      //   if(this._scrollView !== null) {
+      //     this._scrollView.scrollTo({ x: 0, y: scrollH, animated: true });
+      //   }
+      // }, 1);
       // }
     }
 
-    return false;
+    return;
   }
 
   _renderEvents() {
@@ -508,19 +507,19 @@ export default class DayView extends React.PureComponent {
         height: event.height,
         width: event.width + 10,
         top: event.top,
-        opacity: event.opacity
+        opacity: event.opacity,
       };
 
       const eventColor = {
         backgroundColor: event.color,
         borderWidth: 0.8,
-        borderColor: event.borderColor
+        borderColor: event.borderColor,
       };
 
       // Fixing the number of lines for the event title makes this calculation easier.
       // However it would make sense to overflow the title to a new line if needed
       const numberOfLines = Math.floor(event.height / TEXT_LINE_HEIGHT);
-      const formatTime = this.props.format24h ? "HH:mm" : "hh:mm A";
+      const formatTime = this.props.format24h ? 'HH:mm' : 'hh:mm A';
       return (
         <TouchableOpacity
           activeOpacity={0.5}
@@ -532,23 +531,23 @@ export default class DayView extends React.PureComponent {
             this.props.renderEvent(event)
           ) : (
             <View>
-             <Text
+              <Text
                 numberOfLines={3}
                 style={[styles.eventTitle, { color: event.textColor }]}
               >
-                {event.title || "Event"}
+                {event.title || 'Event'}
               </Text>
               {numberOfLines > 1 ? (
                 <Text
                   numberOfLines={numberOfLines - 1}
                   style={[styles.eventSummary, { color: event.textColor }]}
                 >
-                  {event.summary || " "}
+                  {event.summary || ' '}
                 </Text>
               ) : null}
               {numberOfLines > 2 ? (
                 <Text style={styles.eventTimes} numberOfLines={1}>
-                  {moment(event.start).format(formatTime)} -{" "}
+                  {moment(event.start).format(formatTime)} -{' '}
                   {moment(event.end).format(formatTime)}
                 </Text>
               ) : null}
@@ -571,10 +570,12 @@ export default class DayView extends React.PureComponent {
       <ScrollView
         // keyboardShouldPersistTaps="always"
         ref={ref => (this._scrollView = ref)}
-        onContentSizeChange={() => this.getScrollHeight()}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={true}
+        // onContentSizeChange={() => this.getScrollHeight()}
         contentContainerStyle={[
           styles.contentStyle,
-          { width: this.props.width }
+          { width: this.props.width },
         ]}
       >
         {this._renderLines()}
